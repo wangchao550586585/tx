@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tx.mapper.TTestMapper">
+    <resultMap id="tTestMap" type="com.tx.model.po.TTest">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+</resultMap>
+
+
+<sql id="sql">
+            id as id
+             ,
+            name as name
+</sql>
+
+<sql id="sql2">
+         id
+                 ,
+         name
+</sql>
+
+
+</mapper>
