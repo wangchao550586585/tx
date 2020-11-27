@@ -11,4 +11,6 @@ import com.tx.model.po.TTest;
  */
 public interface TTestService extends IService<TTest> {
 
+    void tx();
+
 }

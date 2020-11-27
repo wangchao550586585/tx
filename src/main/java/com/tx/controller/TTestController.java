@@ -25,7 +25,7 @@ public class TTestController {
     /**
      * 分页查询
      * @param page 分页对象
-     * @param tTest 
+     * @param tTest
      * @return R
      */
     @GetMapping("/page" )
