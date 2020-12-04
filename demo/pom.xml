@@ -5,23 +5,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.tx</groupId>
-  <artifactId>tx</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>tx_manage</module>
-      <module>tx_client</module>
-      <module>demo</module>
-    </modules>
+  <artifactId>demo</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
-    <name>tx</name>
+  <name>demo</name>
+
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-
 
   <dependencies>
 
@@ -31,11 +25,11 @@
       <version>2.4.0</version>
     </dependency>
 
-<!--    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-core</artifactId>
-      <version>5.5.1</version>
-    </dependency>-->
+    <!--    <dependency>
+          <groupId>cn.hutool</groupId>
+          <artifactId>hutool-core</artifactId>
+          <version>5.5.1</version>
+        </dependency>-->
 
     <dependency>
       <groupId>com.baomidou</groupId>
@@ -84,6 +78,7 @@
     </dependency>
 
   </dependencies>
+
 
 
 </project>
