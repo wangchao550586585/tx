@@ -1,12 +1,9 @@
 package org.tx;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
@@ -17,10 +14,10 @@ import io.netty.util.CharsetUtil;
  * @date  2020年12月5日 07:56:07
  */
 @Sharable
-public class EchoClientHandler
+public class TXClientHandler
         extends ChannelInboundHandlerAdapter {
-    EchoClient echoClient;
-    public EchoClientHandler(EchoClient echoClient) {
+    TXClient echoClient;
+    public TXClientHandler(TXClient echoClient) {
         this.echoClient=echoClient;
     }
 
@@ -38,7 +35,7 @@ public class EchoClientHandler
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception {
-        ctx.writeAndFlush(Unpooled.buffer().writeBytes("hello".getBytes()));
+//        ctx.writeAndFlush(Unpooled.buffer().writeBytes("hello".getBytes()));
     }
 
     @Override
@@ -46,11 +43,12 @@ public class EchoClientHandler
     public void exceptionCaught(ChannelHandlerContext ctx,
                                 Throwable cause) {
         cause.printStackTrace();
-        ctx.close();
+//        ctx.close();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("-----------------------");
         super.channelInactive(ctx);
         //执行到这里,channel已经关闭
         //重新连接

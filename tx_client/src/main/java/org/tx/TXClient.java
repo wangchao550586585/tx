@@ -1,30 +1,26 @@
 package org.tx;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.CharsetUtil;
-import lombok.SneakyThrows;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class EchoClient {
+public class TXClient {
     private final String host;
     private final int port;
     NioEventLoopGroup group;
     private static volatile boolean isStarting = false;
 
-    public EchoClient(String host, int port) {
+    public TXClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
@@ -36,11 +32,12 @@ public class EchoClient {
         }
         isStarting = true;
         group = new NioEventLoopGroup();
-        EchoClientHandler echoClientHandler = new EchoClientHandler(this);
+        TXClientHandler echoClientHandler = new TXClientHandler(this);
         try {
             Bootstrap b = new Bootstrap();
             b.group(group)
                     .channel(NioSocketChannel.class)
+                    .option(ChannelOption.SO_KEEPALIVE, true)
                     .remoteAddress(new InetSocketAddress(host, port))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
@@ -63,7 +60,7 @@ public class EchoClient {
         }
     }
 
-    public synchronized void close()  {
+    public synchronized void close() {
         if (Objects.isNull(group)) {
         } else {
             group.shutdownGracefully();
@@ -72,10 +69,10 @@ public class EchoClient {
         }
     }
 
-    public synchronized void restart()  {
+    public synchronized void restart() {
         close();
         try {
-            Thread.sleep(3*1000);
+            Thread.sleep(3 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -85,6 +82,6 @@ public class EchoClient {
     public static void main(String[] args) throws Exception {
         String host = "127.0.0.1";
         int port = 8080;
-        new EchoClient(host, port).start();
+        new TXClient(host, port).start();
     }
 }
