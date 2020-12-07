@@ -11,13 +11,13 @@
 <sql id="sql">
             id as id
              ,
-            name as name
+            `name` as `name`
 </sql>
 
 <sql id="sql2">
          id
                  ,
-         name
+         `name`
 </sql>
 
 

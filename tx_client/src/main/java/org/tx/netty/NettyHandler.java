@@ -11,8 +11,6 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import org.springframework.util.ObjectUtils;
-import org.tx.netty.NettyService;
-import org.tx.netty.SocketManager;
 
 
 /**
@@ -20,12 +18,12 @@ import org.tx.netty.SocketManager;
  * @date 2020年12月5日 07:56:07
  */
 @Sharable
-public class TXClientHandler
+public class NettyHandler
         extends ChannelInboundHandlerAdapter {
     private NettyService echoClient;
     private String heartData;
 
-    public TXClientHandler(NettyService echoClient) {
+    public NettyHandler(NettyService echoClient) {
         this.echoClient = echoClient;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("a", "h");

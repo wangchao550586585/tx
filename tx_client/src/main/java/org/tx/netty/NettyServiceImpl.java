@@ -10,7 +10,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tx.config.TxConfig;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
@@ -18,11 +20,11 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class NettyServiceImpl implements NettyService, DisposableBean {
-    private final String host="127.0.0.1";
-    private final int port=8080;
+    @Autowired
+    TxConfig txConfig;
+
     NioEventLoopGroup group;
     private static volatile boolean isStarting = false;
-
 
 
     @Override
@@ -32,13 +34,13 @@ public class NettyServiceImpl implements NettyService, DisposableBean {
         }
         isStarting = true;
         group = new NioEventLoopGroup();
-        TXClientHandler echoClientHandler = new TXClientHandler(this);
+        NettyHandler echoClientHandler = new NettyHandler(this);
         try {
             Bootstrap b = new Bootstrap();
             b.group(group)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.SO_KEEPALIVE, true)
-                    .remoteAddress(new InetSocketAddress(host, port))
+                    .remoteAddress(new InetSocketAddress(txConfig.getHost(), txConfig.getPort()))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel socketChannel) throws Exception {

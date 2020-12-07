@@ -1,6 +1,7 @@
-package org.tx.interceptor;
+package org.tx.aop.entity;
 
 import org.tx.anno.TxTransaction;
+import org.tx.aop.interceptor.TxTransactionLocal;
 
 /**
  * @author WangChao

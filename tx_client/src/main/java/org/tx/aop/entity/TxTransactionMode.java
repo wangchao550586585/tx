@@ -1,4 +1,4 @@
-package org.tx.interceptor;
+package org.tx.aop.entity;
 
 /**
  * @author WangChao

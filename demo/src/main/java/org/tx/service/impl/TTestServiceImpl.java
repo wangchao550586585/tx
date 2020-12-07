@@ -1,11 +1,11 @@
 package org.tx.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 import org.tx.anno.TxTransaction;
 import org.tx.mapper.TTestMapper;
 import org.tx.po.TTest;
 import org.tx.service.TTestService;
-import org.springframework.stereotype.Service;
 
 /**
  * @author wangchao
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TTestServiceImpl extends ServiceImpl<TTestMapper, TTest> implements TTestService {
 
-    @TxTransaction
+    @TxTransaction(isStart = true)
     @Override
     public void tx() {
         System.out.println("测试注解");

@@ -1,4 +1,4 @@
-package org.tx;
+package org.tx.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -14,22 +14,22 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
-public class TXServer {
+public class TxmNettyService {
     private final int port;
     EventLoopGroup group;
 
-    public TXServer(int port) {
+    public TxmNettyService(int port) {
         this.port = port;
     }
 
     public static void main(String[] args)
             throws Exception {
         int port = 8080;
-        new TXServer(port).start();
+        new TxmNettyService(port).start();
     }
 
     public void start() throws Exception {
-        TXServerHandler serverHandler = new TXServerHandler();
+        TxmNettyHandler serverHandler = new TxmNettyHandler();
         group = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();

@@ -1,4 +1,4 @@
-package org.tx.interceptor;
+package org.tx.aop.interceptor;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
