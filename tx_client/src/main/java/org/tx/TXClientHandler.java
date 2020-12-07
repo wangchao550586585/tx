@@ -1,5 +1,7 @@
 package org.tx;
 
+import com.alibaba.fastjson.JSONObject;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,18 +9,31 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 
 /**
  * @author wangchao
- * @date  2020年12月5日 07:56:07
+ * @date 2020年12月5日 07:56:07
  */
 @Sharable
 public class TXClientHandler
         extends ChannelInboundHandlerAdapter {
-    TXClient echoClient;
-    public TXClientHandler(TXClient echoClient) {
-        this.echoClient=echoClient;
+    private NettyService echoClient;
+    private String heartData;
+
+    public TXClientHandler(NettyService echoClient) {
+        this.echoClient = echoClient;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("a", "h");
+        jsonObject.put("k", "h");
+        jsonObject.put("p", "{}");
+        heartData = jsonObject.toString();
+
     }
 
     /**
@@ -29,13 +44,26 @@ public class TXClientHandler
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         //当被通知 Channel是活跃的时候，发送一条消息
-        ctx.writeAndFlush(Unpooled.copiedBuffer("心跳包",
+        ctx.writeAndFlush(Unpooled.copiedBuffer(heartData,
                 CharsetUtil.UTF_8));
     }
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception {
-//        ctx.writeAndFlush(Unpooled.buffer().writeBytes("hello".getBytes()));
+        String jsonData = getJsonData(msg);
+        if (!ObjectUtils.isEmpty(jsonData)) {
+            JSONObject jsonObject = JSONObject.parseObject(jsonData);
+            if (jsonObject.containsKey("a")) {
+                SocketManager.instance().flagOpen();
+            }
+        }
+    }
+
+    private String getJsonData(Object msg) {
+        ByteBuf in = (ByteBuf) msg;
+        String s = in.toString(CharsetUtil.UTF_8);
+        ReferenceCountUtil.release(msg);
+        return s;
     }
 
     @Override
@@ -48,8 +76,8 @@ public class TXClientHandler
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("-----------------------");
         super.channelInactive(ctx);
+        SocketManager.instance().flagClose();
         //执行到这里,channel已经关闭
         //重新连接
         echoClient.restart();
@@ -73,7 +101,7 @@ public class TXClientHandler
             } else if (event.state() == IdleState.WRITER_IDLE) {
                 //好久没发消息
                 //发送心跳包
-                ctx.writeAndFlush(Unpooled.buffer().writeBytes("心跳包".getBytes()));
+                ctx.writeAndFlush(Unpooled.buffer().writeBytes(heartData.getBytes()));
             } else if (event.state() == IdleState.ALL_IDLE) {
                 //好久没收发消息
             }

@@ -38,17 +38,12 @@ public enum  TXType {
 /*    接收
             TXM通知提交回滚
             */
-
+    EXEC_FROM_TXM(1),
 /*
 发送
             加入TXM事务组
             响应TXM提交回滚结果*/
-    REGISTER("register"),
-    REGISTER("register"),
-    REGISTER("register"),
-    REGISTER("register"),
-    REGISTER("register"),
-    REGISTER("register"),
+
 
     //------------------------SPONSOR  发起方
     /**
