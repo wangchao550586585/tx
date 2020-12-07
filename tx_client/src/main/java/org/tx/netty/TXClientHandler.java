@@ -1,4 +1,4 @@
-package org.tx;
+package org.tx.netty;
 
 import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
@@ -11,9 +11,8 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-
-import java.util.Objects;
+import org.tx.netty.NettyService;
+import org.tx.netty.SocketManager;
 
 
 /**

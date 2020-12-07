@@ -1,9 +1,10 @@
-package org.tx;
+package org.tx.listen;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.tx.netty.NettyService;
 
 /**
  * @author WangChao
