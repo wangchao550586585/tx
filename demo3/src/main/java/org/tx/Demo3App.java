@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @Configuration
-public class TXManagerApp {
+public class Demo3App {
 
     public static void main(String[] args) {
-        SpringApplication.run(TXManagerApp.class, args);
+        SpringApplication.run(Demo3App.class, args);
     }
 
 

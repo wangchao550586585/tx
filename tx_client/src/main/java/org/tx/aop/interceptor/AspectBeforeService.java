@@ -3,11 +3,14 @@ package org.tx.aop.interceptor;
 import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tx.anno.TxTransaction;
 import org.tx.aop.entity.TransactionInvocation;
 import org.tx.aop.entity.TxTransactionInfo;
 import org.tx.aop.entity.TxTransactionMode;
+import org.tx.factory.TransactionServerFactory;
+import org.tx.factory.bean.TransactionServer;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -18,6 +21,9 @@ import java.util.Objects;
  */
 @Component
 public class AspectBeforeService {
+    @Autowired
+    TransactionServerFactory transactionServerFactory;
+
     @SneakyThrows
     public Object around(String groupId, String mode, ProceedingJoinPoint pj) {
         MethodSignature signature = (MethodSignature) pj.getSignature();
@@ -43,8 +49,8 @@ public class AspectBeforeService {
         info.setMode(TxTransactionMode.valueOf(mode));
 
         //创建事务服务类
+        TransactionServer transactionServer = transactionServerFactory.getTransactionServer(info);
 
-
-        return null;
+        return transactionServer.execute(pj,info);
     }
 }

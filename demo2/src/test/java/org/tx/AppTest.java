@@ -11,19 +11,19 @@ import org.tx.service.TTestService;
  * Unit test for simple App.
  */
 @SpringBootTest
-public class AppTest {
-    @Autowired
-    TTestService tTestService;
+public class AppTest 
+{
+        @Autowired
+        TTestService tTestService;
 
-    @Test
-    public void textTx() {
-        tTestService.tx();
-    }
-
+        @Test
+        public void textTx() {
+            tTestService.tx();
+        }
     @Test
     public void textInsert() {
         TTest tTest = new TTest();
         tTest.setName("hehelo");
         tTestService.save(tTest);
     }
-}
+    }

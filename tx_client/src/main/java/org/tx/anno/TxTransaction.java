@@ -11,4 +11,9 @@ import java.lang.annotation.*;
 @Inherited      //类继承关系中，子类会继承父类使用的注解中被@Inherited修饰的注解
 @Documented  //给标记注解生成api文档
 public @interface TxTransaction {
+    /**
+     * 是否LCN事务发起方
+     * @return true 是:是发起方 false 否:是参与方
+     */
+    boolean isStart() default false;
 }
