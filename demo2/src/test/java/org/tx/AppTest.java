@@ -16,10 +16,7 @@ public class AppTest
         @Autowired
         TTestService tTestService;
 
-        @Test
-        public void textTx() {
-            tTestService.tx();
-        }
+
     @Test
     public void textInsert() {
         TTest tTest = new TTest();

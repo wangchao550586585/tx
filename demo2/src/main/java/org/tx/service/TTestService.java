@@ -11,6 +11,7 @@ import org.tx.po.TTest;
  */
 public interface TTestService extends IService<TTest> {
 
-    void tx();
+
+    boolean saveTTest();
 
 }

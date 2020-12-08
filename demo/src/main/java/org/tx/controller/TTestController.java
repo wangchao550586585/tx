@@ -17,11 +17,10 @@ import org.tx.service.TTestService;
 @RequiredArgsConstructor
 @RequestMapping("/ttest" )
 public class TTestController {
-
     private final TTestService tTestService;
+
     @GetMapping("/tx")
     public R tx() {
-        tTestService.tx();
-        return R.ok(null);
+        return R.ok(tTestService.saveTTest());
     }
 }
