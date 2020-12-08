@@ -14,7 +14,7 @@ import org.tx.service.TTestService;
 @Service
 public class TTestServiceImpl extends ServiceImpl<TTestMapper, TTest> implements TTestService {
 
-    @TxTransaction(isStart = true)
+    @TxTransaction()
     @Override
     public void tx() {
         System.out.println("测试注解");

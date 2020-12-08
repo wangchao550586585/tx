@@ -10,7 +10,7 @@ import org.tx.factory.TransactionServerType;
 /**
  * @author wangchao
  * @description: TODO
- * @date 2020/12/713:31
+ * @date 2020/12/7 13:31
  */
 @Component
 public class B implements TransactionServer   , InitializingBean {

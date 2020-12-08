@@ -6,7 +6,7 @@ import org.tx.aop.entity.TxTransactionInfo;
 /**
  * @author wangchao
  * @description: TODO
- * @date 2020/12/713:17
+ * @date 2020/12/7 13:17
  */
 public interface TransactionServer {
     public Object execute(ProceedingJoinPoint point, TxTransactionInfo info) throws Throwable;

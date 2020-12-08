@@ -9,9 +9,21 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: yokea-demo3
+
 logging:
   level:
     root: INFO
 tx:
   host: 127.0.0.1
   port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.0.86:8001/eureka/
+  instance:
+    prefer-ip-address: true
