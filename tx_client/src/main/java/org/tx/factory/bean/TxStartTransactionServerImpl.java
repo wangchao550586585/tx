@@ -13,7 +13,7 @@ import org.tx.factory.TransactionServerType;
  * @date 2020/12/8 8:31
  */
 @Component
-public class A implements TransactionServer , InitializingBean {
+public class TxStartTransactionServerImpl implements TransactionServer , InitializingBean {
     @Override
     public Object execute(ProceedingJoinPoint point, TxTransactionInfo info) throws Throwable {
         return point.proceed();
@@ -21,6 +21,6 @@ public class A implements TransactionServer , InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        TransactionServerFactory.register(TransactionServerType.A,this);
+        TransactionServerFactory.register(TransactionServerType.txStart,this);
     }
 }

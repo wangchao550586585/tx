@@ -6,5 +6,5 @@ package org.tx.factory;
  * @date 2020/12/8 10:23
  */
 public enum TransactionServerType {
-    DefaultTransactionServer, A, B;
+    txDefault, txStart, txRunning;
 }
