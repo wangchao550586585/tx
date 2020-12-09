@@ -16,6 +16,8 @@ import org.tx.factory.TransactionServerType;
 public class TxStartTransactionServerImpl implements TransactionServer , InitializingBean {
     @Override
     public Object execute(ProceedingJoinPoint point, TxTransactionInfo info) throws Throwable {
+
+
         return point.proceed();
     }
 
