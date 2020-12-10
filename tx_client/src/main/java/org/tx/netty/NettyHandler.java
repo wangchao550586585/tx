@@ -39,7 +39,9 @@ public class NettyHandler
      * @param ctx
      */
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+        SocketManager.instance().setCtx(ctx);
         //当被通知 Channel是活跃的时候，发送一条消息
         ctx.writeAndFlush(Unpooled.copiedBuffer(heartData,
                 CharsetUtil.UTF_8));

@@ -24,6 +24,6 @@ tx:
 eureka:
   client:
     service-url:
-      defaultZone: http://192.168.0.86:8001/eureka/
+      defaultZone: http://127.0.0.1:8001/eureka/
   instance:
     prefer-ip-address: true
