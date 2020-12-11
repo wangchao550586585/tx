@@ -17,8 +17,11 @@ import org.tx.redis.RedisServiceImpl;
 
 @Sharable
 public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
-    @Autowired
     RedisService redisService;
+
+    public TxmNettyHandler(RedisService redisService) {
+        this.redisService = redisService;
+    }
 
     /**
      * 对于每个传入的消息都要调用
@@ -31,13 +34,12 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
         ByteBuf in = (ByteBuf) msg;
         String jsonData = getJsonData(msg);
         service(jsonData, ctx);
-        //将接收到的消息写给发送者，而不冲刷出站消息
-//        ctx.write(in);
 
     }
 
     private void service(String jsonData, ChannelHandlerContext ctx) {
         if (!ObjectUtils.isEmpty(jsonData)) {
+            System.out.println(jsonData);
             JSONObject jsonObject = JSONObject.parseObject(jsonData);
             String action = jsonObject.getString("a");
             String key = jsonObject.getString("k");
@@ -54,6 +56,7 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
                     break;
                 //关闭
                 case "ctg":
+                    res = "-1";
                     break;
             }
             JSONObject jsonObject1 = new JSONObject();
@@ -78,7 +81,7 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
         TxGroup txGroup = new TxGroup();
         txGroup.setGroupId(groupId);
         txGroup.setStartTime(System.currentTimeMillis());
-        redisService.saveTransaction(RedisServiceImpl.key_prefix + groupId,txGroup.toJsonString());
+        redisService.saveTransaction(RedisServiceImpl.key_prefix + groupId, txGroup.toJsonString());
         return txGroup;
     }
 

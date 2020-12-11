@@ -45,6 +45,6 @@ public class TxTransactionInfo {
      */
     public boolean isTXRunning() {
         return null != this.getTxTransactionLocal()
-                && !ObjectUtils.isEmpty(this.getGroupId());
+               || !ObjectUtils.isEmpty(this.getGroupId());
     }
 }

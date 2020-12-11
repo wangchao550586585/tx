@@ -20,10 +20,7 @@ public class TransactionAspect implements Ordered {
 
     @Around("@annotation(org.tx.anno.TxTransaction)")
     public Object around(ProceedingJoinPoint pj) throws Throwable {
-        System.out.println("环绕前");
-//        Object around = pj.proceed();// 执行目标方法
         Object around = txManagerInterceptor.around(pj);
-//        System.out.println("环绕后");
         return around;
     }
 

@@ -8,7 +8,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tx.redis.RedisService;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
@@ -19,8 +21,11 @@ public class TxmNettyService {
     private final int port = 8080;
     EventLoopGroup group;
 
+    @Autowired
+    RedisService redisService;
+
     public void start() {
-        TxmNettyHandler serverHandler = new TxmNettyHandler();
+        TxmNettyHandler serverHandler = new TxmNettyHandler(redisService);
         group = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();

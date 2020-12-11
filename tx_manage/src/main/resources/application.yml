@@ -12,6 +12,10 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: txm
+  redis:
+    jedis:
+      pool:
+        max-idle: 8
 
 logging:
   level:
@@ -23,4 +27,9 @@ eureka:
       defaultZone: http://127.0.0.1:8001/eureka/
   instance:
     prefer-ip-address: true
+
+
+
+
+
 

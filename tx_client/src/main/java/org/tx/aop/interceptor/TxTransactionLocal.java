@@ -13,6 +13,7 @@ public class TxTransactionLocal {
     private String groupId;
     private boolean start;
     private TxTransactionMode mode;
+    private String kid;
     private static final ThreadLocal<TxTransactionLocal> currentLocal = new InheritableThreadLocal();
 
     public static TxTransactionLocal current() {

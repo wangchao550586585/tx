@@ -21,14 +21,33 @@ import java.util.UUID;
 public class TxRunningTransactionServerImpl implements TransactionServer, InitializingBean {
     @Override
     public Object execute(ProceedingJoinPoint point, TxTransactionInfo info) throws Throwable {
-        Object proceed=null;
+        Object proceed = null;
+        String kid = Utils.buildUUID();
+        String groupId = info.getGroupId();
 
-             proceed = point.proceed();
+        TxTransactionLocal txTransactionLocal = new TxTransactionLocal();
+        txTransactionLocal.setGroupId(groupId);
+        txTransactionLocal.setMode(info.getMode());
+        txTransactionLocal.setKid(kid);
+        txTransactionLocal.setStart(false);
+        TxTransactionLocal.setCurrent(txTransactionLocal);
+
+
+        try {
+            proceed = point.proceed();
+
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+
+
+
+
+            TxTransactionLocal.setCurrent(null);
+        }
 
         return proceed;
     }
-
-
 
 
     @Override

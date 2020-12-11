@@ -1,6 +1,7 @@
 package org.tx.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void getTransaction(String key) {
-        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+      ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.get(key);
 
     }

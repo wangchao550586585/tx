@@ -29,6 +29,7 @@ public class TxStartTransactionServerImpl implements TransactionServer, Initiali
         txTransactionLocal.setGroupId(groupId);
         txTransactionLocal.setMode(info.getMode());
         txTransactionLocal.setStart(true);
+        //用于feigh,发送txGroup和mode请求头
         TxTransactionLocal.setCurrent(txTransactionLocal);
 
         int state = 0;
@@ -45,6 +46,7 @@ public class TxStartTransactionServerImpl implements TransactionServer, Initiali
             int result = rs == 0 ? 0 : state;
 
 
+            TxTransactionLocal.setCurrent(null);
         }
         return proceed;
     }
