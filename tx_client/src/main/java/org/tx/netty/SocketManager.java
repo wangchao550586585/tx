@@ -46,11 +46,19 @@ public class SocketManager {
         this.ctx = ctx;
     }
 
-    public void sendMsg(final Request request) {
+    public String sendMsg(final Request request) {
+        String result = null;
         if (Objects.isNull(ctx) || ctx.channel() == null || !ctx.channel().isActive()) {
         } else {
-            ctx.writeAndFlush(Unpooled.buffer().writeBytes(request.toMsg().getBytes()));
+
+            String k = request.getKey();
+            Task task = TaskManager.instance().createTask(k);
+
+            new Thread(() -> ctx.writeAndFlush(Unpooled.buffer().writeBytes(request.toMsg().getBytes()))).start();
+            task.await();
+            result = (String) task.exec();
         }
+        return result;
 
     }
 }

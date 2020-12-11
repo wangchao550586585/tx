@@ -54,9 +54,9 @@ public class TxStartTransactionServerImpl implements TransactionServer, Initiali
         jsonObject.put("g", groupId);
         jsonObject.put("s", state);
         Request request = new Request("ctg", jsonObject.toString());
-        SocketManager.instance().sendMsg(request);
 
-        return state;
+        //这里需要做线程通信
+        return Integer.parseInt(SocketManager.instance().sendMsg(request));
     }
 
     @Override
@@ -68,6 +68,7 @@ public class TxStartTransactionServerImpl implements TransactionServer, Initiali
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("g", groupId);
         Request request = new Request("cg", jsonObject.toString());
+        //注册不需要返回值
         SocketManager.instance().sendMsg(request);
     }
 }

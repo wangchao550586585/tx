@@ -53,7 +53,25 @@ public class NettyHandler
         if (!ObjectUtils.isEmpty(jsonData)) {
             JSONObject jsonObject = JSONObject.parseObject(jsonData);
             if (jsonObject.containsKey("a")) {
-                SocketManager.instance().flagOpen();
+
+            } else {
+                String k = jsonObject.getString("k");
+                //说明心跳
+                if (k.equals("h")) {
+                    SocketManager.instance().flagOpen();
+                }else{
+                    String d = jsonObject.getString("d");
+                    //这里需要做线程通信
+                    Task task = TaskManager.instance().getTask(k);
+                    task.setBack(new Back() {
+                        @Override
+                        public Object call() {
+                            return d;
+                        }
+                    });
+                    //通过key唤醒
+                    task.signal();
+                }
             }
         }
     }

@@ -8,27 +8,18 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.springframework.stereotype.Service;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-
+@Service
 public class TxmNettyService {
-    private final int port;
+    private final int port = 8080;
     EventLoopGroup group;
 
-    public TxmNettyService(int port) {
-        this.port = port;
-    }
-
-    public static void main(String[] args)
-            throws Exception {
-        int port = 8080;
-        new TxmNettyService(port).start();
-    }
-
-    public void start() throws Exception {
+    public void start() {
         TxmNettyHandler serverHandler = new TxmNettyHandler();
         group = new NioEventLoopGroup();
         try {

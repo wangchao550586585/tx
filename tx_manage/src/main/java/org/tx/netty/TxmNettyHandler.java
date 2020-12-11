@@ -1,14 +1,25 @@
 package org.tx.netty;
 
+import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.tx.redis.RedisService;
+import org.tx.redis.RedisServiceImpl;
 
 @Sharable
 public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
+    @Autowired
+    RedisService redisService;
+
     /**
      * 对于每个传入的消息都要调用
      *
@@ -18,8 +29,64 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf in = (ByteBuf) msg;
+        String jsonData = getJsonData(msg);
+        service(jsonData, ctx);
         //将接收到的消息写给发送者，而不冲刷出站消息
-       ctx.write(in);
+//        ctx.write(in);
+
+    }
+
+    private void service(String jsonData, ChannelHandlerContext ctx) {
+        if (!ObjectUtils.isEmpty(jsonData)) {
+            JSONObject jsonObject = JSONObject.parseObject(jsonData);
+            String action = jsonObject.getString("a");
+            String key = jsonObject.getString("k");
+            JSONObject params = JSONObject.parseObject(jsonObject.getString("p"));
+            String channelAddress = ctx.channel().remoteAddress().toString();
+            String res = "";
+            switch (action) {
+                //心跳
+                case "h":
+                    break;
+                //注册
+                case "cg":
+                    res = execute(channelAddress, key, params);
+                    break;
+                //关闭
+                case "ctg":
+                    break;
+            }
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("k", key);
+            jsonObject1.put("d", res);
+            ctx.writeAndFlush(Unpooled.buffer().writeBytes(jsonObject1.toString().getBytes()));
+
+
+        }
+    }
+
+    private String execute(String channelAddress, String key, JSONObject params) {
+        TxGroup txGroup = createTxGroup(params);
+        String res = txGroup.toJsonString();
+
+        return res;
+
+    }
+
+    private TxGroup createTxGroup(JSONObject params) {
+        String groupId = params.getString("g");
+        TxGroup txGroup = new TxGroup();
+        txGroup.setGroupId(groupId);
+        txGroup.setStartTime(System.currentTimeMillis());
+        redisService.saveTransaction(RedisServiceImpl.key_prefix + groupId,txGroup.toJsonString());
+        return txGroup;
+    }
+
+    private String getJsonData(Object msg) {
+        ByteBuf in = (ByteBuf) msg;
+        String s = in.toString(CharsetUtil.UTF_8);
+        ReferenceCountUtil.release(msg);
+        return s;
     }
 
     @Override
