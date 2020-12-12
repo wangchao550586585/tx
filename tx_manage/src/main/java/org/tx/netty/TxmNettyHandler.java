@@ -10,7 +10,6 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.tx.redis.RedisService;
 import org.tx.redis.RedisServiceImpl;
@@ -58,6 +57,10 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
                 case "ctg":
                     res = "-1";
                     break;
+                //加入事务组
+                case "atg":
+                    res = executeAdd(channelAddress, key, params);
+                    break;
             }
             JSONObject jsonObject1 = new JSONObject();
             jsonObject1.put("k", key);
@@ -68,12 +71,25 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
+    private String executeAdd(String channelAddress, String key, JSONObject params) {
+        TxGroup txGroup = addTxGroup(params,channelAddress);
+        txGroup.setNowTime(System.currentTimeMillis());
+        return txGroup.toJsonString();
+    }
+
+    private TxGroup addTxGroup(JSONObject params,String channelAddress) {
+        String groupId = params.getString("g");
+        String taskId = params.getString("t");
+        String methodStr = params.getString("ms");
+        TxGroup transaction = redisService.getTransaction(RedisServiceImpl.key_prefix + groupId);
+
+
+        return null;
+    }
+
     private String execute(String channelAddress, String key, JSONObject params) {
         TxGroup txGroup = createTxGroup(params);
-        String res = txGroup.toJsonString();
-
-        return res;
-
+        return txGroup.toJsonString();
     }
 
     private TxGroup createTxGroup(JSONObject params) {

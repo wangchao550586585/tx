@@ -10,8 +10,6 @@ import org.tx.factory.TransactionServerFactory;
 import org.tx.factory.TransactionServerType;
 import org.tx.netty.SocketManager;
 
-import java.util.UUID;
-
 /**
  * @author wangchao
  * @description: TODO
@@ -39,14 +37,24 @@ public class TxRunningTransactionServerImpl implements TransactionServer, Initia
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         } finally {
-
-
+            TxGroup group = addTransaction(groupId, kid, info.getInvocation().getMethodStr());
 
 
             TxTransactionLocal.setCurrent(null);
         }
 
         return proceed;
+    }
+
+    private TxGroup addTransaction(String groupId, String taskId, String methodStr) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("g",groupId);
+        jsonObject.put("t",taskId);
+        jsonObject.put("ms",methodStr);
+
+        Request request = new Request("atg", jsonObject.toString());
+        String json = SocketManager.instance().sendMsg(request);
+        return TxGroup.parse(json);
     }
 
 

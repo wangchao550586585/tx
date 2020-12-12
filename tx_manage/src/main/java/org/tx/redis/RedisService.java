@@ -1,5 +1,7 @@
 package org.tx.redis;
 
+import org.tx.netty.TxGroup;
+
 /**
  * @author wangchao
  * @description: TODO
@@ -8,7 +10,7 @@ package org.tx.redis;
 public interface RedisService {
     void saveTransaction(String key, String value);
 
-    void getTransaction(String key);
+    TxGroup getTransaction(String key);
 
     void del(String key);
 }

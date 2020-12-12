@@ -12,6 +12,15 @@ import lombok.Data;
 public class TxGroup {
     private String groupId;
     private Long startTime;
+    private Long nowTime;
+
+    public static TxGroup parse(String json) {
+        JSONObject jsonObject = JSONObject.parseObject(json);
+        TxGroup txGroup = new TxGroup();
+        txGroup.setGroupId(jsonObject.getString("g"));
+        txGroup.setStartTime(jsonObject.getLong("st"));
+        return txGroup;
+    }
 
     public String toJsonString() {
         JSONObject jsonObject = new JSONObject();
@@ -19,4 +28,6 @@ public class TxGroup {
         jsonObject.put("st", startTime);
         return jsonObject.toString();
     }
+
+
 }
