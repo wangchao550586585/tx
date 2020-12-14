@@ -11,8 +11,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Task {
     private ReentrantLock reentrantLock = new ReentrantLock();
     private Condition condition = reentrantLock.newCondition();
-
+    String key;
     private Back back;
+
+    public Task(String key) {
+        this.key=key;
+    }
 
     public void await() {
         reentrantLock.lock();
@@ -40,4 +44,13 @@ public class Task {
     public Object exec() {
         return back.call();
     }
+
+    public void remove() {
+        TaskManager.instance().remove(getKey());
+    }
+
+    public String getKey() {
+        return key;
+    }
+
 }

@@ -61,6 +61,10 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
                 case "atg":
                     res = executeAdd(channelAddress, key, params);
                     break;
+               //注册信息
+                case "umi":
+                    res = executeAdd(channelAddress, key, params);
+                    break;
             }
             JSONObject jsonObject1 = new JSONObject();
             jsonObject1.put("k", key);
@@ -81,10 +85,20 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
         String groupId = params.getString("g");
         String taskId = params.getString("t");
         String methodStr = params.getString("ms");
-        TxGroup transaction = redisService.getTransaction(RedisServiceImpl.key_prefix + groupId);
 
+        String key=RedisServiceImpl.key_prefix + groupId;
+        TxGroup txGroup = redisService.getTransaction(key);
 
-        return null;
+        TxInfo txInfo = new TxInfo();
+        txInfo.setChannelAddress(channelAddress);
+        txInfo.setTaskId(taskId);
+        txInfo.setMethodStr(methodStr);
+        txInfo.setAddress("127.0.0.1:8115");
+
+        //这里欠缺注册信息 todo
+        txGroup.addTxInfo(txInfo);
+        redisService.saveTransaction(key,txGroup.toAllJsonString());
+        return txGroup;
     }
 
     private String execute(String channelAddress, String key, JSONObject params) {

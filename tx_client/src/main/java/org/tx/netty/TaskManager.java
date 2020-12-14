@@ -10,6 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TaskManager {
     public static ConcurrentHashMap<String, Task> map = new ConcurrentHashMap<>();
 
+    public void remove(String key) {
+        map.remove(key);
+    }
+
     private static class TaskManagerHolder {
         static final TaskManager INSTANCE = createSocketManager();
 
@@ -23,7 +27,7 @@ public class TaskManager {
     }
 
     public Task createTask(String key) {
-        Task task = new Task();
+        Task task = new Task(key);
         map.put(key, task);
         return task;
     }

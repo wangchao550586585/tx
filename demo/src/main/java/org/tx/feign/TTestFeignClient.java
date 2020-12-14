@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @description: TODO
  * @date 2020/12/8 17:03
  */
-@FeignClient(name = "demo2")
+@FeignClient(name = "tx-demo2")
 public interface TTestFeignClient {
     @PostMapping("/ttest/tx")
     public R tx();

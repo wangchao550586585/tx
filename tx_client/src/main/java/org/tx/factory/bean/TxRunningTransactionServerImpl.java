@@ -30,16 +30,26 @@ public class TxRunningTransactionServerImpl implements TransactionServer, Initia
         txTransactionLocal.setStart(false);
         TxTransactionLocal.setCurrent(txTransactionLocal);
 
-
+/**
+ * 执行成功
+ *     尚未连上txm,
+ *          通知事务组其他回滚，抛出异常
+ *     连上txm
+ *          等待txm通知是否回滚,若是则抛出异常
+ *
+ *
+ * 执行失败(这里尚未加入事务组)
+ *     通知事务组其他回滚，抛出异常
+ */
         try {
             proceed = point.proceed();
+            //加入事务组
+            TxGroup group = addTransaction(groupId, kid, info.getInvocation().getMethodStr());
+            System.out.println(group);
 
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         } finally {
-            TxGroup group = addTransaction(groupId, kid, info.getInvocation().getMethodStr());
-
-
             TxTransactionLocal.setCurrent(null);
         }
 

@@ -57,6 +57,8 @@ public class SocketManager {
             new Thread(() -> ctx.writeAndFlush(Unpooled.buffer().writeBytes(request.toMsg().getBytes()))).start();
             task.await();
             result = (String) task.exec();
+
+            task.remove();
         }
         return result;
 

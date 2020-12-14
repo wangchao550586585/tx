@@ -1,5 +1,6 @@
 package org.tx.factory.bean;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
@@ -11,8 +12,14 @@ import lombok.Data;
 public class TxGroup {
     private String groupId;
     private Long startTime;
+    private Long nowTime;
 
     public static TxGroup parse(String json) {
-        return null;
+        TxGroup txGroup = new TxGroup();
+        JSONObject parse = JSONObject.parseObject(json);
+        txGroup.setGroupId(parse.getString("g"));
+        txGroup.setStartTime(parse.getLong("st"));
+        txGroup.setNowTime(parse.getLong("nt"));
+        return txGroup;
     }
 }
