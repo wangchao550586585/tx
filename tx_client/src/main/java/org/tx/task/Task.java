@@ -1,4 +1,6 @@
-package org.tx.netty;
+package org.tx.task;
+
+import org.tx.netty.Back;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,9 +15,13 @@ public class Task {
     private Condition condition = reentrantLock.newCondition();
     String key;
     private Back back;
+    /**
+     * 标记事务执行结果,0失败,1成功
+     */
+    private volatile int state = 0;
 
     public Task(String key) {
-        this.key=key;
+        this.key = key;
     }
 
     public void await() {
@@ -49,8 +55,16 @@ public class Task {
         TaskManager.instance().remove(getKey());
     }
 
+
     public String getKey() {
         return key;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 }

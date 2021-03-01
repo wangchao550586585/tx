@@ -55,13 +55,13 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
                     break;
                 //关闭
                 case "ctg":
-                    res = "-1";
+                    res = executeCtg(channelAddress, key, params);
                     break;
                 //加入事务组
                 case "atg":
                     res = executeAdd(channelAddress, key, params);
                     break;
-               //注册信息
+               //注册信息  todo
                 case "umi":
                     res = executeAdd(channelAddress, key, params);
                     break;
@@ -73,6 +73,13 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
 
 
         }
+    }
+
+    private String executeCtg(String channelAddress, String key, JSONObject params) {
+        String groupId = params.getString("g");
+        Integer s = params.getInteger("s");
+
+        return null;
     }
 
     private String executeAdd(String channelAddress, String key, JSONObject params) {

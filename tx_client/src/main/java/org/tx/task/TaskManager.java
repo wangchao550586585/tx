@@ -1,4 +1,4 @@
-package org.tx.netty;
+package org.tx.task;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,9 +15,9 @@ public class TaskManager {
     }
 
     private static class TaskManagerHolder {
-        static final TaskManager INSTANCE = createSocketManager();
+        static final TaskManager INSTANCE = createTaskManager();
 
-        private static TaskManager createSocketManager() {
+        private static TaskManager createTaskManager() {
             return new TaskManager();
         }
     }
@@ -35,5 +35,10 @@ public class TaskManager {
     public Task getTask(String key) {
         return map.get(key);
     }
+
+    public boolean isRemove(String key) {
+        return map.containsKey(key);
+    }
+
 
 }

@@ -24,29 +24,23 @@ public class TransactionServerFactory
     private static Map<TransactionServerType, TransactionServer> transactionServerMap = new ConcurrentHashMap<>();
 
     public TransactionServer getTransactionServer(TxTransactionInfo info) {
+        TransactionServerType txType = TransactionServerType.txDefault;
         //通讯不正常,直接返回
         if (!SocketManager.instance().isNetState()) {
-            return transactionServerMap.get(TransactionServerType.txDefault);
         }
         //说明是事务发起方
-        if (info.isTXStart()) {
-            if (SocketManager.instance().isNetState()) {
-                return transactionServerMap.get(TransactionServerType.txStart);
-            } else {
-                return transactionServerMap.get(TransactionServerType.txDefault);
-            }
+        else if (info.isTXStart()) {
+            txType = TransactionServerType.txStart;
         }
-
         //事务参与方
-        if (info.isTXRunning()){
-            if (SocketManager.instance().isNetState()) {
-                return transactionServerMap.get(TransactionServerType.txRunning);
-            } else {
-                return transactionServerMap.get(TransactionServerType.txDefault);
-            }
+        else if (info.isTXRunning()) {
+            txType = TransactionServerType.txRunning;
         }
+        return getTransactionServer(txType);
+    }
 
-        return transactionServerMap.get(TransactionServerType.txDefault);
+    private TransactionServer getTransactionServer(TransactionServerType txType) {
+        return transactionServerMap.get(txType);
     }
 
     public static void register(TransactionServerType transactionServerType, TransactionServer transactionServer) {

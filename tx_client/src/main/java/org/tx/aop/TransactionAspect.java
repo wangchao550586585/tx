@@ -24,6 +24,10 @@ public class TransactionAspect implements Ordered {
         return around;
     }
 
+    /**
+     * 这里设置的是执行顺序，1000表示在所有事务执行完后，在执行这个拦截器。具体可看我的spring-aop文章那节
+     * @return
+     */
     @Override
     public int getOrder() {
         return 1000;

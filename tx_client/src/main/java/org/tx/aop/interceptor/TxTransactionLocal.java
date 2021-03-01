@@ -10,10 +10,15 @@ import org.tx.aop.entity.TxTransactionMode;
  */
 @Data
 public class TxTransactionLocal {
+     //事务组id
     private String groupId;
-    private boolean start;
+    //是否是事务开启的一方
+    private boolean start=false;
+    //事务模式
     private TxTransactionMode mode;
+    //
     private String kid;
+
     private static final ThreadLocal<TxTransactionLocal> currentLocal = new InheritableThreadLocal();
 
     public static TxTransactionLocal current() {
