@@ -1,5 +1,6 @@
 package org.tx.task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,10 +10,11 @@ import java.util.List;
 public class TaskGroup {
     String groupId;
     private Task current;
-    private List<Task> tasks;
+    private List<Task> tasks ;
 
     public TaskGroup(String groupId) {
         this.groupId = groupId;
+        tasks = new ArrayList<>();
     }
 
     public void setCurrent(Task current) {

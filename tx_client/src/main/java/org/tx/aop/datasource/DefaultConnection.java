@@ -11,15 +11,7 @@ import java.util.concurrent.Executor;
  */
 public abstract class DefaultConnection implements Connection {
     Connection connection;
-    @Override
-    public void rollback() throws SQLException {
-        connection.rollback();
-    }
 
-    @Override
-    public void close() throws SQLException {
-        connection.close();
-    }
     @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException {
         if(connection!=null) {

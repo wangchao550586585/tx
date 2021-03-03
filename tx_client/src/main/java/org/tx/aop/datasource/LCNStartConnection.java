@@ -17,6 +17,7 @@ import java.util.concurrent.Executor;
 public class LCNStartConnection extends DefaultConnection {
     String groupId;
     private Task waitTask;
+    private volatile boolean isClose = false;
 
     public LCNStartConnection(Connection connection) {
         super(connection);
@@ -33,9 +34,9 @@ public class LCNStartConnection extends DefaultConnection {
             try {
                 waitTask.await();
                 int rs = waitTask.getState();
-                if (rs==1){
+                if (rs == 1) {
                     connection.commit();
-                }else{
+                } else {
                     rollback();
                 }
                 waitTask.remove();
@@ -47,7 +48,8 @@ public class LCNStartConnection extends DefaultConnection {
                 }
             } finally {
                 try {
-                   close();
+                    connection.close();
+                    isClose = true;
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -55,6 +57,19 @@ public class LCNStartConnection extends DefaultConnection {
         }).start();
     }
 
+    @Override
+    public void rollback() throws SQLException {
+        connection.rollback();
+        connection.close();
+        isClose = true;
+    }
 
+    @Override
+    public void close() throws SQLException {
+        if (!isClose) {
+            return;
+        }
+        //connection.close();
+    }
 
 }

@@ -49,7 +49,7 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
                 //心跳
                 case "h":
                     break;
-                //注册
+                //注册事务组
                 case "cg":
                     res = execute(channelAddress, key, params);
                     break;
@@ -57,7 +57,7 @@ public class TxmNettyHandler extends ChannelInboundHandlerAdapter {
                 case "ctg":
                     res = executeCtg(channelAddress, key, params);
                     break;
-                //加入事务组
+                //添加事务组
                 case "atg":
                     res = executeAdd(channelAddress, key, params);
                     break;

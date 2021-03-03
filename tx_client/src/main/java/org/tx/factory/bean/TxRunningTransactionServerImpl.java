@@ -9,6 +9,8 @@ import org.tx.aop.interceptor.TxTransactionLocal;
 import org.tx.factory.TransactionServerFactory;
 import org.tx.factory.TransactionServerType;
 import org.tx.netty.SocketManager;
+import org.tx.task.Task;
+import org.tx.task.TaskGroupManager;
 
 /**
  * @author wangchao
@@ -45,7 +47,9 @@ public class TxRunningTransactionServerImpl implements TransactionServer, Initia
             proceed = point.proceed();
             //加入事务组
             TxGroup group = addTransaction(groupId, kid, info.getInvocation().getMethodStr());
-            System.out.println(group);
+            Task task = TaskGroupManager.getInstance().getTask(kid);
+
+
 
         } catch (Throwable throwable) {
             throwable.printStackTrace();
